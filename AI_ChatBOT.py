@@ -10,13 +10,18 @@ messages = [
 def chatbot(input):
     if input:
         messages.append({"role": "user", "content": input})
-        chat = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo", messages=messages
-        )
-        user = [" Colonel!"," Cheif!"]
-        reply = chat.choices[0].message.content+random.choice(user)
-        messages.append({"role": "assistant", "content": reply})
-        return reply
+        try:
+            chat = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo", messages=messages
+            )
+            user = [" Colonel!"," Cheif!"]
+            reply = chat.choices[0].message.content+random.choice(user)
+            messages.append({"role": "assistant", "content": reply})
+            return reply
+        except Exception as e:
+            # Handle the error here, such as logging the error or returning a helpful message to the user
+            return "An error occurred: {}".format(str(e))
+
 
 inputs = gr.inputs.Textbox(lines=7, label="Orders for Lieutenant")
 outputs = gr.outputs.Textbox(label="Intels from Lieutenant")
